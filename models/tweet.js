@@ -4,9 +4,7 @@ var mongoose = require('mongoose');
 
 var tweetModel = function () {
 
-  var tweetSchema = mongoose.Schema({
-
-  });
+  var tweetSchema = mongoose.Schema({});
 
   return mongoose.model('Tweet', tweetSchema);
 
