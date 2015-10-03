@@ -104,7 +104,7 @@
   // Whether only function scope should be used for scope tests.
   "funcscope": false,
   // Whether es.next specific syntax should be allowed.
-  "esnext": false,
+  "esnext": true,
   // Style preferences
 
   // Whether constructor names must be capitalized.
