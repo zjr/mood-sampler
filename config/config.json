@@ -29,6 +29,10 @@
     "contentPath": "path:./locales",
     "fallback": "en-US"
   },
+  "databaseConfig": {
+    "host": "localhost",
+    "database": "mood"
+  },
   "specialization": {
   },
   "middleware": {
