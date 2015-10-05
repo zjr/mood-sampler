@@ -14,7 +14,7 @@ var tweetModel = function () {
 
     coordinates : {
       coordinates: [Number],
-      type       : String
+      type       : { type: String }
     },
 
     user        : {
