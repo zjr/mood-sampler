@@ -1,7 +1,7 @@
 'use strict';
 
 var app     = module.exports = require('express')();
-var options = require('./lib/spec');
+var options = require('./lib/spec')();
 var kraken  = require('kraken-js');
 
 /*
