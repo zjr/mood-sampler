@@ -1,17 +1,17 @@
 'use strict';
 
-var Promise     = require('bluebird');
+const Promise = require('bluebird');
 
-var TweetStream = require('../../../lib/stream/tweet-stream');
-var Tweet       = require('../../../models/tweet');
+const TweetStream = require('../../../lib/stream/tweet-stream');
+const Tweet       = require('../../../models/tweet');
 
-const count     = 20;
+const count = 20;
 
-module.exports  = function (router) {
+module.exports = function (router) {
 
   router.get('/', function (req, res) {
-    var tweetPromises = [];
-    var tweetStream = new TweetStream();
+    let tweetPromises = [];
+    let tweetStream   = new TweetStream();
 
     tweetStream.on('data', data => {
       tweetPromises.push(Tweet.create(data));
