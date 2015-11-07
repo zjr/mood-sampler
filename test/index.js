@@ -2,46 +2,42 @@
 
 'use strict';
 
+const kraken  = require('kraken-js');
+const express = require('express');
+const path    = require('path');
+const request = require('supertest');
+const sinon   = require('sinon');
 
-var kraken  = require('kraken-js'),
-    express = require('express'),
-    path    = require('path'),
-    request = require('supertest');
-
-
-describe('index', function () {
-
-  var app, mock;
+const https   = require('https');
 
 
-  beforeEach(function (done) {
-    app = express();
-    app.on('start', done);
-    app.use(kraken({
-      basedir: path.resolve(__dirname, '..')
-    }));
+let app, mock;
 
-    mock = app.listen(1337);
+beforeEach(done => {
+  app = express();
+  app.on('start', done);
+  app.use(kraken({
+    basedir: path.resolve(__dirname, '..')
+  }));
 
-  });
+  mock = app.listen(1337);
+});
+
+afterEach(done => {
+  mock.close(done);
+});
 
 
-  afterEach(function (done) {
-    mock.close(done);
-  });
+describe('index', () => {
 
-
-  it('should say "hello"', function (done) {
+  it('should say "hello"', done => {
     request(mock)
       .get('/')
       .expect(200)
       .expect('Content-Type', /html/)
-
       .expect(/Hello, /)
-
-      .end(function (err, res) {
-        done(err);
-      });
+      .end(done);
   });
 
 });
+
