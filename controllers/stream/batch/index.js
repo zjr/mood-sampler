@@ -16,17 +16,18 @@ module.exports = function (router) {
     tweetStream.on('data', data => {
       tweetPromises.push(Tweet.create(data));
 
-      if (tweetPromises.length < count) { return; }
+      if (tweetPromises.length === count) {
 
-      tweetStream.stop();
+        tweetStream.stop();
 
-      Promise
-        .all(tweetPromises)
-        .then(tweets => res.json(tweets))
-        .catch(err => res.json(err));
+        Promise
+          .all(tweetPromises)
+          .then(tweets => res.json(tweets))
+          .catch(err => res.json(err));
+      }
     });
 
-    tweetStream.on('error', err => res.json(err));
+    tweetStream.on('error', err => console.error(err));
   });
 
 };
