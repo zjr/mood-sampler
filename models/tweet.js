@@ -12,12 +12,12 @@ var tweetModel = function () {
     lang        : String,
     place       : Object, // possible 'place' tweeted from
 
-    coordinates : {
+    coordinates: {
       coordinates: [Number],
       type       : { type: String }
     },
 
-    user        : {
+    user: {
       id_str            : String,
       name              : String,
       description       : String,

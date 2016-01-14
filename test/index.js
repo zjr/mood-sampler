@@ -2,35 +2,55 @@
 
 'use strict';
 
-const kraken  = require('kraken-js');
-const express = require('express');
-const path    = require('path');
-const request = require('supertest');
-const zlib    = require('zlib');
+const mongoose = require('mongoose');
+const kraken   = require('kraken-js');
+const express  = require('express');
+const path     = require('path');
+const request  = require('supertest');
+const zlib     = require('zlib');
 
 const nock = require('nock');
 
 const fs    = require('fs');
 const https = require('https');
 
-const spec = require('../lib/spec')();
 
-let app, mock;
+let app, mock, spec, wId;
 
-const options = Object.assign({
-  basedir: path.resolve(__dirname, '..')
-}, spec);
+const getConfig = function getConfig() {
+  spec = require('../lib/spec')();
+  wId  = global.wallabyId;
+
+  if (wId !== undefined) {
+    spec.setDb(`mood-test-${wId}`);
+  }
+
+  return Object.assign({
+    basedir: path.resolve(__dirname, '..')
+  }, spec);
+};
+
 
 beforeEach(done => {
+  mongoose.models       = {};
+  mongoose.modelSchemas = {};
+ 
+  const options = getConfig();
+
   app = express();
+
   app.on('start', done);
+  app.on('error', done);
+
   app.use(kraken(options));
 
   mock = app.listen(0);
 });
 
 afterEach(done => {
+  spec.getConn().db.dropDatabase();
   mock.close(done);
+  nock.cleanAll();
 });
 
 describe('index', () => {
@@ -38,10 +58,12 @@ describe('index', () => {
   it('should say "hello"', done => {
     request(mock)
       .get('/')
-      .expect(200)
       .expect('Content-Type', /html/)
       .expect(/Hello, /)
-      .end(done);
+      .end((err, res) => {
+        console.error(err);
+        done(err);
+      });
   });
 
 });
@@ -63,7 +85,6 @@ describe('stream batch', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function (err, res) {
-        console.dir(res);
         done(err);
       });
   });
