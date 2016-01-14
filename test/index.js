@@ -34,7 +34,7 @@ const getConfig = function getConfig() {
 beforeEach(done => {
   mongoose.models       = {};
   mongoose.modelSchemas = {};
- 
+
   const options = getConfig();
 
   app = express();
@@ -49,7 +49,10 @@ beforeEach(done => {
 
 afterEach(done => {
   spec.getConn().db.dropDatabase();
-  mock.close(done);
+  mongoose.disconnect(err => {
+    if (err) { throw err; }
+    mock.close(done);
+  });
   nock.cleanAll();
 });
 
@@ -61,7 +64,7 @@ describe('index', () => {
       .expect('Content-Type', /html/)
       .expect(/Hello, /)
       .end((err, res) => {
-        console.error(err);
+        if (err) { throw err; }
         done(err);
       });
   });
